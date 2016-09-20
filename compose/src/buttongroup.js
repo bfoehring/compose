@@ -16,7 +16,7 @@ const style = {
 		borderBottomRightRadius: 3,
 		borderRight: "none",
 		width: 36
-	}
+	},
 };
 
 const ButtonGroup = React.createClass({
@@ -24,6 +24,7 @@ const ButtonGroup = React.createClass({
 	render(){
 
 		const showTip = this.props.showTip;
+		const showTool = this.props.showTool;
 
 		return(
 			<ul style={style.buttongroup} id="poo">
@@ -41,7 +42,8 @@ const ButtonGroup = React.createClass({
 									buttonIndex={i} 
 									style={Object.assign(firstStyles, lastStyles)} 
 									featureDescription={content.toolName} 
-									showTip={showTip} 
+									showTip={showTip}
+									showTool={showTool} 
 									toolIcon={content.toolIcon}
 								/>;
 					}

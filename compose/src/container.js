@@ -9,6 +9,7 @@ import List from "./list";
 import MessageTypePicker from "./messagetypepicker";
 import ProfilePicker from "./profilepicker";
 import InfoTip from "./infotip";
+import MediumHeadline from "./mediumheadline";
 
 const Container = React.createClass({
 
@@ -25,6 +26,7 @@ const Container = React.createClass({
 				draftTools: [{toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}, {toolName: "Message Approval", toolIcon: "fa fa-check-circle"}],
 				composeTools: [{toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}],
 			},
+			messageTypes: ["Compose", "Schedule", "Queue", "Draft"],
 		};
 	},
 
@@ -42,7 +44,9 @@ const Container = React.createClass({
 			showTip: false,
 			tipDescription: "",
 			tipPosition: "",
-			isMinimized: false
+			isMinimized: false,
+			showTool: false,
+			activeTool: ""
 		};
 	},
 
@@ -101,9 +105,7 @@ const Container = React.createClass({
 		if(profile.includes("-list")) {
 			var listLess = profile.replace("-list", "");
 			adjustedProfile = listLess;
-			console.log(adjustedProfile);
 		} else if(profile.includes("-tokenlist")) {
-			console.log(profile);
 			var tokenListless = profile.replace("-tokenlist", "");
 			adjustedProfile = tokenListless;
 		}
@@ -187,6 +189,54 @@ const Container = React.createClass({
 			isMinimized: !this.state.isMinimized
 		});
 	},
+
+	showTool(e) {
+		
+		var tool = e.currentTarget.id;
+		var name = tool.replace("-buttonGroup", "");
+
+		switch(name) {
+			case "Media":
+				this.setState({
+					showTool: !this.state.showTool,
+					activeTool: name,
+				});
+				break;
+			case "Targeting":
+				this.setState({
+					showTool: !this.state.showTool,
+					activeTool: name,
+				});
+				break;
+			case "Scheduling Options":
+				this.setState({
+					showTool: !this.state.showTool,
+					activeTool: name,
+				});
+				break;
+			case "Queue Options":
+				this.setState({
+					showTool: !this.state.showTool,
+					activeTool: name,
+				});
+				break;
+			case "Tagging":
+				this.setState({
+					showTool: !this.state.showTool,
+					activeTool: name,
+				});
+				break;
+			case "Message Approval":
+				this.setState({
+					showTool: !this.state.showTool,
+					activeTool: name,
+				});
+				break;
+			default:
+				console.log("something went wrong");
+				break;
+		}
+	},
 	
 	render() {
 
@@ -202,6 +252,8 @@ const Container = React.createClass({
 				background: "#fff",
 				boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)",
 				width: 380,
+				height: 340,
+				overflow: "scroll",
 				padding: 0,
 				position: "absolute",
 				bottom: 0,
@@ -356,10 +408,14 @@ const Container = React.createClass({
 				color: this.props.iconColor,
 				float: "left",
 				margin: "5px 5px 0px 0px",
+			},
+			toolContainer: {
+				padding: "0px 20px 20px 20px",
+				//borderTop: "1px solid #eee"
 			}
 		};
 
-		var allMessageTypes = ["Compose", "Schedule", "Queue", "Draft"];
+		var allMessageTypes = this.props.messageTypes;
 		var availableMessageTypes = [];
 
 		for(var i = 0; i < allMessageTypes.length; i++) {
@@ -423,8 +479,22 @@ const Container = React.createClass({
 						{
 							this.state.showTip ? <InfoTip tipPosition={this.state.tipPosition} featureDescription={this.state.tipDescription} /> : null
 						}
-						<ButtonGroup key="six" content={this.state.availableTools} showTip={this.showTip} />
+						<ButtonGroup key="six" content={this.state.availableTools} showTip={this.showTip} showTool={this.showTool} />
 					</div>
+				</div>
+				<div>
+					{
+						this.state.showTool ? 
+							<div style={style.toolContainer}>
+								{(this.state.activeTool === "Scheduling Options") ? <MediumHeadline headline="Scheduling Options" /> : null}
+								{(this.state.activeTool === "Queue Options") ? <MediumHeadline headline="Queue Options" /> : null}
+								{(this.state.activeTool === "Media") ? <MediumHeadline headline="Media" /> : null}
+								{(this.state.activeTool === "Targeting") ? <MediumHeadline headline="Targeting" /> : null}
+								{(this.state.activeTool === "Message Approval") ? <MediumHeadline headline="Message Approval" /> : null}
+								{(this.state.activeTool === "Tagging") ? <MediumHeadline headline="Tagging" /> : null}
+							</div> 
+						: null
+					}
 				</div>
 			</div>
 		);
