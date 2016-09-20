@@ -20,11 +20,11 @@ const Container = React.createClass({
 			profiles: ["15charactername", "16charactername", "17charactername", "bill_foehring", "anotherHandle"],
 			textRows: "6",
 			availableTools: {
-				schedulingTools: ["Scheduling Options", "Media", "Targeting", "Tagging", "Message Approval"],
-				queueTools: ["Queue Options", "Media", "Targeting", "Tagging", "Message Approval"],
-				draftTools: ["Media", "Targeting", "Tagging", "Message Approval"],
-				composeTools: ["Media", "Targeting", "Tagging", "Message Approval"],
-			}
+				schedulingTools: [{toolName: "Scheduling Options", toolIcon: "fa fa-calendar"}, {toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}, {toolName: "Message Approval", toolIcon: "fa fa-check-circle"}],
+				queueTools: [{toolName: "Queue Options", toolIcon: "fa fa-hourglass-half"}, {toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}, {toolName: "Message Approval", toolIcon: "fa fa-check-circle"}],
+				draftTools: [{toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}, {toolName: "Message Approval", toolIcon: "fa fa-check-circle"}],
+				composeTools: [{toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}],
+			},
 		};
 	},
 
@@ -79,7 +79,7 @@ const Container = React.createClass({
 			this.setState({
 				messageType: "Compose",
 				buttonText: "Send",
-				availableTools: this.props.availableTools.draftTools
+				availableTools: this.props.availableTools.composeTools
 			});
 		}
 	},
@@ -423,7 +423,7 @@ const Container = React.createClass({
 						{
 							this.state.showTip ? <InfoTip tipPosition={this.state.tipPosition} featureDescription={this.state.tipDescription} /> : null
 						}
-						<ButtonGroup key="six" content={this.state.availableTools} featureDescription={this.state.availableTools} showTip={this.showTip} />
+						<ButtonGroup key="six" content={this.state.availableTools} showTip={this.showTip} />
 					</div>
 				</div>
 			</div>

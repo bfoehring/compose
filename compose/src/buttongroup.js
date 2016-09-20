@@ -13,7 +13,9 @@ const style = {
 	},
 	lastButtonGroupItem: {
 		borderTopRightRadius: 3,
-		borderBottomRightRadius: 3
+		borderBottomRightRadius: 3,
+		borderRight: "none",
+		width: 36
 	}
 };
 
@@ -28,11 +30,20 @@ const ButtonGroup = React.createClass({
 				{this.props.content.map(
 					function(content, i, allContent){
 
-						var idKey = content + "-buttonGroup";
+						var idKey = content.toolName + "-buttonGroup";
 						const firstStyles = (i === 0) ? style.firstButtonGroupItem : {};
 						const lastStyles = (i === allContent.length - 1) ? style.lastButtonGroupItem : {};
 
-						return <ButtonGroupItem content={content} key={i} id={idKey} buttonIndex={i} style={Object.assign(firstStyles, lastStyles)} featureDescription={content} showTip={showTip} />;
+						return <ButtonGroupItem 
+									content={content} 
+									key={i} 
+									id={idKey} 
+									buttonIndex={i} 
+									style={Object.assign(firstStyles, lastStyles)} 
+									featureDescription={content.toolName} 
+									showTip={showTip} 
+									toolIcon={content.toolIcon}
+								/>;
 					}
 				)}
 			</ul>

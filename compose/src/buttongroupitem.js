@@ -10,19 +10,30 @@ const ButtonGroupItem = React.createClass({
 				display: "inline-block",
 				listStyle: "none",
 				background: "#eee",
-				height: 36,
-				width: 36,
+				height: 26,
+				width: 35,
+				paddingTop: 10,
+				color: "#b3b3b3",
+				textAlign: "center",
+				borderRight: "1px solid #ddd",
 				transition: "background 0.15s",
 
 				":hover": {
-					background: "#e6e6e6",
+					background: "#b3b3b3",
+					color: "#fff",
 					cursor: "pointer"
 				},
 			},
 		};
 
 		return(
-			<li id={this.props.id} style={[style.buttongroupitem, this.props.style]} onMouseOver={this.props.showTip} onMouseOut={this.props.showTip}></li>
+			<li id={this.props.id} 
+				style={[style.buttongroupitem, this.props.style]} 
+				onMouseOver={this.props.showTip} 
+				onMouseOut={this.props.showTip}
+			>
+				<i className={this.props.toolIcon} aria-hidden="true"></i>
+			</li>
 		);
 	}
 });
