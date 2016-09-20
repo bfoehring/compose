@@ -1,5 +1,4 @@
 // props are from above | state is what you change.
-// something new
 
 import React from "react";
 import Radium from "radium";
