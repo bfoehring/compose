@@ -1,0 +1,436 @@
+// props are from above | state is what you change.
+// something new
+
+import React from "react";
+import Radium from "radium";
+import Button from "./button";
+import TextArea from "./textarea";
+import ButtonGroup from "./buttongroup";
+import List from "./list";
+import MessageTypePicker from "./messagetypepicker";
+import ProfilePicker from "./profilepicker";
+import InfoTip from "./infotip";
+
+const Container = React.createClass({
+
+	getDefaultProps() {
+		return {
+			_close: () => {},
+			icon: '',
+			iconColor: 'black',
+			profiles: ["15charactername", "16charactername", "17charactername", "bill_foehring", "anotherHandle"],
+			textRows: "6",
+			availableTools: {
+				schedulingTools: ["Scheduling Options", "Media", "Targeting", "Tagging", "Message Approval"],
+				queueTools: ["Queue Options", "Media", "Targeting", "Tagging", "Message Approval"],
+				draftTools: ["Media", "Targeting", "Tagging", "Message Approval"],
+				composeTools: ["Media", "Targeting", "Tagging", "Message Approval"],
+			}
+		};
+	},
+
+	getInitialState() {
+		return {
+			buttonText: "Send",
+			messageType: "Compose",
+			isPickerShown: false,
+			selectedProfiles: [],
+			isInactive: true,
+			isMessagePickerShown: false,
+			showToken: false,
+			availableTools: this.props.availableTools.composeTools,
+			isEmpty: true,
+			showTip: false,
+			tipDescription: "",
+			tipPosition: "",
+			isMinimized: false
+		};
+	},
+
+	showPicker() {
+		this.setState({
+			isPickerShown: !this.state.isPickerShown,
+			isMessagePickerShown: false
+		});
+	},
+
+	changeMessageType(e) {
+
+		this.showPicker();
+
+		if(e.currentTarget.id === "Schedule-list") {
+			this.setState({
+				messageType: "Schedule",
+				buttonText: "Schedule",
+				availableTools: this.props.availableTools.schedulingTools
+			});
+		} else if (e.currentTarget.id === "Queue-list") {
+			this.setState({
+				messageType: "Queue",
+				buttonText: "Queue",
+				availableTools: this.props.availableTools.queueTools
+			});
+		} else if (e.currentTarget.id === "Draft-list") {
+			this.setState({
+				messageType: "Draft",
+				buttonText: "Draft",
+				availableTools: this.props.availableTools.draftTools
+			});
+		} else if (e.currentTarget.id === "Compose-list") {
+			this.setState({
+				messageType: "Compose",
+				buttonText: "Send",
+				availableTools: this.props.availableTools.draftTools
+			});
+		}
+	},
+
+	showMessageTypes() {
+		this.setState({
+			isMessagePickerShown: !this.state.isMessagePickerShown,
+			isPickerShown: false
+		});
+	},
+
+	addProfiles(e) {
+
+		e.stopPropagation();
+
+		var profile = e.currentTarget.id;
+		var adjustedProfile = "";
+
+		if(profile.includes("-list")) {
+			var listLess = profile.replace("-list", "");
+			adjustedProfile = listLess;
+			console.log(adjustedProfile);
+		} else if(profile.includes("-tokenlist")) {
+			console.log(profile);
+			var tokenListless = profile.replace("-tokenlist", "");
+			adjustedProfile = tokenListless;
+		}
+
+		if(this.state.selectedProfiles.indexOf(adjustedProfile) > -1) {
+			for(var s = 0; s < this.state.selectedProfiles.length; s++) {
+				if(this.state.selectedProfiles[s] === adjustedProfile) {
+
+					var profileClicked = this.state.selectedProfiles.indexOf(this.state.selectedProfiles[s]);
+					this.state.selectedProfiles.splice(profileClicked, 1);
+
+					this.setState({
+						selectedProfiles: this.state.selectedProfiles,
+					});
+
+					if(this.state.selectedProfiles.length === 0) {
+						this.setState({
+							isEmpty: true,
+							showToken: false
+						});
+					}
+
+				} 
+			}
+		} else {
+			this.state.selectedProfiles.push(adjustedProfile);
+			this.setState({
+				showToken: true,
+				isEmpty: false
+			});
+		}
+
+	},
+
+	send() {
+
+		switch(this.state.buttonText) {
+			case "Send":
+				alert("your message was sent");
+				break;
+			case "Schedule":
+				alert("your message was scheduled");
+				break;
+			case "Queue":
+				alert("your message was queued");
+				break;
+			case "Draft":
+				alert("your message was drafted");
+				break;
+			default:
+				alert("there was an error");
+				break;
+		}
+	},
+
+	showTip(e) {
+
+		var tipId = e.currentTarget.id.replace("-buttonGroup", "");
+		var buttonWidthPX = e.currentTarget.style.width;
+		var buttonWidth = buttonWidthPX.replace("px", "");
+		var finalValue = Number(buttonWidth);
+		var grouping = document.getElementById("poo").childNodes;
+		var buttonIndex = "";
+
+		for(var i = 0; i < grouping.length; i++) {
+			if(grouping[i].id === e.currentTarget.id) {
+				buttonIndex = i;
+			}
+		}
+		var buttonPosition = buttonIndex * finalValue + 10;
+
+		this.setState({
+			showTip: !this.state.showTip,
+			tipDescription: tipId,
+			tipPosition: buttonPosition
+		});
+	},
+
+	minimize() {
+		this.setState({
+			isMinimized: !this.state.isMinimized
+		});
+	},
+	
+	render() {
+
+		const style = {
+			container: {
+				background: "#fff",
+				boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)",
+				width: 680,
+				padding: 0
+			},
+
+			minimize: {
+				background: "#fff",
+				boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)",
+				width: 380,
+				padding: 0,
+				position: "absolute",
+				bottom: 0,
+				right: 20,
+			},
+
+			bottomBar: {
+				padding: 20,
+				borderTop: "1px solid #eee",
+				width: "calc(100%-40px)",
+				height: 36,
+				position: "relative"
+			},
+
+			buttonContainer: {
+				width: "30%",
+				float: "right"
+			},
+
+			buttonGroupContainer: {
+				width: "60%",
+				float: "left",
+				margin: 0
+			},
+
+			topBar: {
+				background: "#4d4d4e",
+				float: "left",
+				width: "100%",
+			},
+
+			profilePickerBar: {
+				background: "#eee",
+				float: "left",
+				width: "100%",
+			},
+
+			profPickerMenu: {
+				position: "absolute",
+				top: 84,
+				left: 8
+			},
+
+			menuWithToken: {
+				position: "absolute",
+				top: 92,
+				left: 8,
+			},
+
+			messageTypePicker: {
+				background: "#4d4d4d",
+				padding: 10,
+				float: "left",
+
+				":hover": {
+					background: "#333",
+					cursor: "pointer"
+				}
+			},
+
+			profilePickerContain: {
+				background: "#eee",
+				color: "#333",
+				padding: 10,
+				float: "left",
+				width: "calc(100% - 20px)",
+
+				":hover": {
+					background: "#ddd",
+					color: "#1a1a1a",
+					cursor: "pointer",
+				}
+			},
+
+			messageTypeMenu: {
+				position: "absolute",
+				top: 46,
+				left: 8,
+				zIndex: 1000
+			},
+
+			messageTypeChevDown: {
+				margin: "0px 0px 0px 10px",
+				color: "#fff",
+				transition: "transform 0.1s"
+			},
+
+			messageTypeChevUp: {
+				margin: "0px 0px 0px 10px",
+				color: "#fff",
+				transform: "rotate(180deg)",
+				transition: "transform 0.1s"
+			},
+
+			close: {
+				float: "right",
+				color: "#fff",
+				padding: 10,
+				background: "#4d4d4d",
+
+				":hover": {
+					background: "#333",
+					cursor: "pointer"
+				}
+			},
+
+			minimizeContainer: {
+				float: "right",
+				color: "#fff",
+				padding: 10,
+				background: "#4d4d4d",
+
+				":hover": {
+					background: "#333",
+					cursor: "pointer"
+				}
+			},
+
+			profPickChevDown: {
+				margin: "0px 0px 2px 10px",
+				color: "#333",
+				transition: "transform 0.1s",
+			},
+
+			profPickChevUp: {
+				margin: "0px 0px 2px 10px",
+				color: "#333",
+				transform: "rotate(180deg)",
+				transition: "transform 0.1s"
+			},	
+
+			openWithToken: {
+				margin: "5px 0px 2px 10px",
+				color: "#333",
+				transform: "rotate(180deg)",
+				transition: "transform 0.1s",
+			},
+
+			closedWithToken: {
+				margin: "5px 0px 2px 10px",
+				color: "#333",
+				transition: "transform 0.1s",
+			},
+
+			networkIcon: {
+				color: this.props.iconColor,
+				float: "left",
+				margin: "0px 5px 0px 0px",
+			},
+
+			networkIconToken: {
+				color: this.props.iconColor,
+				float: "left",
+				margin: "5px 5px 0px 0px",
+			}
+		};
+
+		var allMessageTypes = ["Compose", "Schedule", "Queue", "Draft"];
+		var availableMessageTypes = [];
+
+		for(var i = 0; i < allMessageTypes.length; i++) {
+			if(allMessageTypes[i] === this.state.messageType) {
+
+			} else {
+				availableMessageTypes.push(allMessageTypes[i]);
+			}
+		}
+
+		var arrowStyle = style.profPickChevDown;
+		var menuStyle = style.profPickerMenu;
+
+		if(this.state.isMessagePickerShown && this.state.showToken) {
+			arrowStyle = style.openWithToken;
+			menuStyle = style.menuWithToken;
+		} else if(this.state.showToken) {
+			arrowStyle = style.closedWithToken;
+		} else if(this.state.isMessagePickerShown) {
+			arrowStyle = style.profPickChevUp;
+		}
+
+		return(
+			<div style={this.state.isMinimized ? style.minimize : style.container}>
+				<div style={style.topBar}>
+					<div style={style.messageTypePicker} key="one" onClick={this.showPicker}>
+						<MessageTypePicker messageType={this.state.messageType + " " + "New Message"} key="five" />
+						<i className="fa fa-angle-down" key="two" style={this.state.isPickerShown ? style.messageTypeChevUp : style.messageTypeChevDown} aria-hidden="true"></i>
+					</div>
+					<div style={style.messageTypeMenu}>
+						{this.state.isPickerShown ? <List listItem={availableMessageTypes} handle={this.changeMessageType} /> : null}
+					</div>
+					<div style={style.close} key="close-action" onClick={this.props._close}>
+						<i className="fa fa-times fa-fw" aria-hidden="true"></i>
+					</div>
+					<div style={style.minimizeContainer} key="minimize-action" onClick={this.minimize}>
+						<i className="fa fa-minus fa-fw" aria-hidden="true"></i>
+					</div>
+				</div>
+
+				<div style={style.profilePickerBar}>
+					<div style={style.profilePickerContain} key="three" onClick={this.showMessageTypes}>
+						<i className={this.props.icon} aria-hidden="true" style={this.state.showToken ? style.networkIconToken : style.networkIcon}></i>
+						<ProfilePicker isEmpty={this.state.isEmpty} selectedProfiles={this.state.selectedProfiles} addProfiles={this.addProfiles}/>
+						<i className="fa fa-angle-down" key="four" style={arrowStyle} aria-hidden="true"></i>
+					</div>
+					<div style={menuStyle}>
+						{this.state.isMessagePickerShown ? <List listItem={this.props.profiles} handle={this.addProfiles} /> : null}
+					</div>
+				</div>
+
+				<div style={style.textAreaContainer}>
+					<TextArea rows={this.props.textRows} />
+				</div>
+
+				<div style={style.bottomBar}>
+					<div style={style.buttonContainer}>
+						<Button key="five" buttonText={this.state.buttonText} _onClick={this.send} />
+					</div>
+					<div style={style.buttonGroupContainer}>
+						{
+							this.state.showTip ? <InfoTip tipPosition={this.state.tipPosition} featureDescription={this.state.tipDescription} /> : null
+						}
+						<ButtonGroup key="six" content={this.state.availableTools} featureDescription={this.state.availableTools} showTip={this.showTip} />
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+});
+
+export default Radium(Container);
