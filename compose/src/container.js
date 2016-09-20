@@ -60,6 +60,10 @@ const Container = React.createClass({
 	changeMessageType(e) {
 
 		this.showPicker();
+		this.setState({
+			activeTool: "",
+			showTool: false
+		});
 
 		if(e.currentTarget.id === "Schedule-list") {
 			this.setState({
