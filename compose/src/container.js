@@ -196,41 +196,17 @@ const Container = React.createClass({
 		var name = tool.replace("-buttonGroup", "");
 
 		switch(name) {
-			case "Media":
-				this.setState({
-					showTool: !this.state.showTool,
-					activeTool: name,
-				});
-				break;
-			case "Targeting":
-				this.setState({
-					showTool: !this.state.showTool,
-					activeTool: name,
-				});
-				break;
-			case "Scheduling Options":
-				this.setState({
-					showTool: !this.state.showTool,
-					activeTool: name,
-				});
-				break;
-			case "Queue Options":
-				this.setState({
-					showTool: !this.state.showTool,
-					activeTool: name,
-				});
-				break;
-			case "Tagging":
-				this.setState({
-					showTool: !this.state.showTool,
-					activeTool: name,
-				});
-				break;
-			case "Message Approval":
-				this.setState({
-					showTool: !this.state.showTool,
-					activeTool: name,
-				});
+			case name:
+				if(this.state.showTool && this.state.activeTool === name) {
+					this.setState({
+						showTool: false
+					});
+				} else {
+					this.setState({
+						activeTool: name,
+						showTool: true
+					});
+				}
 				break;
 			default:
 				console.log("something went wrong");
