@@ -28,7 +28,8 @@ const Container = React.createClass({
 				composeTools: [{toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}],
 			},
 			messageTypes: ["Compose", "Schedule", "Queue", "Draft"],
-			users: ["Arnita Hayden", "Bill Foehring", "Henry Millison", "Cory Danielson", "Brian Cordionnier", "Ryan Skurkis", "Austin Gundry", "Viju Hullur"]
+			users: ["Arnita Hayden", "Bill Foehring", "Henry Millison", "Cory Danielson", "Brian Cordionnier", "Ryan Skurkis", "Austin Gundry", "Viju Hullur"],
+			tags: ["#sproutsocial", "social media", "sprout coffee", "YOLO", "getsocial", "#productideas", "customer support", "compose 2.0", "new compose"]
 		};
 	},
 
@@ -481,7 +482,12 @@ const Container = React.createClass({
 										<MenuList content={this.props.users} />
 									</div> : 
 								null}
-								{(this.state.activeTool === "Tagging") ? <MediumHeadline headline="Tagging" /> : null}
+								{(this.state.activeTool === "Tagging") ?
+									<div> 
+										<MediumHeadline headline="Tagging" />
+										<MenuList content={this.props.tags} /> 
+									</div> : 
+								null}
 							</div> 
 						: null
 					}
