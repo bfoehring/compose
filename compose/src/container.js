@@ -29,7 +29,7 @@ const Container = React.createClass({
 			},
 			messageTypes: ["Compose", "Schedule", "Queue", "Draft"],
 			users: ["Arnita Hayden", "Bill Foehring", "Henry Millison", "Cory Danielson", "Brian Cordionnier", "Ryan Skurkis", "Austin Gundry", "Viju Hullur"],
-			tags: ["#sproutsocial", "social media", "sprout coffee", "YOLO", "getsocial", "#productideas", "customer support", "compose 2.0", "new compose"]
+			tags: ["#sproutsocial", "social media", "sprout coffee", "YOLO", "getsocial", "#productideas", "customer support", "compose 2.0", "new compose"],
 		};
 	},
 
@@ -49,7 +49,8 @@ const Container = React.createClass({
 			tipPosition: "",
 			isMinimized: false,
 			showTool: false,
-			activeTool: ""
+			activeTool: "",
+			checked: false
 		};
 	},
 
@@ -219,6 +220,13 @@ const Container = React.createClass({
 				console.log("something went wrong");
 				break;
 		}
+	},
+
+	checkTest() {
+		console.log("worked!");
+		this.setState({
+			checked: !this.state.checked
+		});
 	},
 	
 	render() {
