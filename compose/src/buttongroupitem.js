@@ -31,6 +31,7 @@ const ButtonGroupItem = React.createClass({
 				style={[style.buttongroupitem, this.props.style]} 
 				onMouseOver={this.props.showTip} 
 				onMouseOut={this.props.showTip}
+				onClick={this.props.showTool}
 			>
 				<i className={this.props.toolIcon} aria-hidden="true"></i>
 			</li>
