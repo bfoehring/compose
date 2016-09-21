@@ -222,8 +222,11 @@ const Container = React.createClass({
 		}
 	},
 
-	checkTest() {
-		console.log("worked!");
+	checkTest(e) {
+
+		var selectedRow = e.currentTarget.id;
+		console.log(selectedRow);
+
 		this.setState({
 			checked: !this.state.checked
 		});
@@ -493,7 +496,7 @@ const Container = React.createClass({
 								{(this.state.activeTool === "Tagging") ?
 									<div> 
 										<MediumHeadline headline="Tagging" />
-										<MenuList content={this.props.tags} /> 
+										<MenuList content={this.props.tags} checked={this.state.checked} onClick={this.checkTest} /> 
 									</div> : 
 								null}
 							</div> 
