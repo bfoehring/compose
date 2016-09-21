@@ -221,13 +221,6 @@ const Container = React.createClass({
 				break;
 		}
 	},
-
-	checkTest() {
-		console.log("worked!");
-		this.setState({
-			checked: !this.state.checked
-		});
-	},
 	
 	render() {
 
