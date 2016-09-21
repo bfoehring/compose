@@ -284,6 +284,7 @@ const Container = React.createClass({
 				position: "absolute",
 				top: 92,
 				left: 8,
+				zIndex: 4000
 			},
 
 			messageTypePicker: {
