@@ -10,6 +10,7 @@ import MessageTypePicker from "./messagetypepicker";
 import ProfilePicker from "./profilepicker";
 import InfoTip from "./infotip";
 import MediumHeadline from "./mediumheadline";
+import MenuList from "./menulist";
 
 const Container = React.createClass({
 
@@ -19,7 +20,7 @@ const Container = React.createClass({
 			icon: '',
 			iconColor: 'black',
 			profiles: ["15charactername", "16charactername", "17charactername", "bill_foehring", "anotherHandle"],
-			textRows: "6",
+			textRows: "4",
 			availableTools: {
 				schedulingTools: [{toolName: "Scheduling Options", toolIcon: "fa fa-calendar"}, {toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}, {toolName: "Message Approval", toolIcon: "fa fa-check-circle"}],
 				queueTools: [{toolName: "Queue Options", toolIcon: "fa fa-hourglass-half"}, {toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}, {toolName: "Message Approval", toolIcon: "fa fa-check-circle"}],
@@ -27,6 +28,7 @@ const Container = React.createClass({
 				composeTools: [{toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}],
 			},
 			messageTypes: ["Compose", "Schedule", "Queue", "Draft"],
+			users: ["Arnita Hayden", "Bill Foehring", "Henry Millison", "Cory Danielson", "Brian Cordionnier", "Ryan Skurkis", "Austin Gundry", "Viju Hullur"]
 		};
 	},
 
@@ -274,7 +276,8 @@ const Container = React.createClass({
 			profPickerMenu: {
 				position: "absolute",
 				top: 84,
-				left: 8
+				left: 8,
+				zIndex: 4000
 			},
 
 			menuWithToken: {
@@ -391,7 +394,8 @@ const Container = React.createClass({
 			},
 			toolContainer: {
 				padding: "0px 20px 20px 20px",
-				//borderTop: "1px solid #eee"
+				maxHeight: 200,
+				overflow: "scroll"
 			}
 		};
 
@@ -470,7 +474,12 @@ const Container = React.createClass({
 								{(this.state.activeTool === "Queue Options") ? <MediumHeadline headline="Queue Options" /> : null}
 								{(this.state.activeTool === "Media") ? <MediumHeadline headline="Media" /> : null}
 								{(this.state.activeTool === "Targeting") ? <MediumHeadline headline="Targeting" /> : null}
-								{(this.state.activeTool === "Message Approval") ? <MediumHeadline headline="Message Approval" /> : null}
+								{(this.state.activeTool === "Message Approval") ? 
+									<div>
+										<MediumHeadline headline="Message Approval" />
+										<MenuList content={this.props.users} />
+									</div> : 
+								null}
 								{(this.state.activeTool === "Tagging") ? <MediumHeadline headline="Tagging" /> : null}
 							</div> 
 						: null

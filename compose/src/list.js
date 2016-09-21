@@ -11,7 +11,8 @@ const List = React.createClass({
 				padding: 0,
 				margin: 0,
 				boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)",
-				minWidth: 250
+				minWidth: 250,
+				zIndex: 4000
 			}
 		};
 
