@@ -11,6 +11,7 @@ import ProfilePicker from "./profilepicker";
 import InfoTip from "./infotip";
 import MediumHeadline from "./mediumheadline";
 import MenuList from "./menulist";
+import Filter from "./filter";
 
 const Container = React.createClass({
 
@@ -233,7 +234,7 @@ const Container = React.createClass({
 			for(var i = 0; i < lI.length; i++) {
 				if(lI[i] === num) {
 					console.log(lI[i]);
-					this.state.listItemsChecked.splice(lI.indexOf(num), 1);
+					lI.splice(lI.indexOf(num), 1);
 					this.setState({
 						checkedTags: lI
 					});
@@ -255,7 +256,7 @@ const Container = React.createClass({
 			for(var i = 0; i < lI.length; i++) {
 				if(lI[i] === num) {
 					console.log(lI[i]);
-					this.state.listItemsChecked.splice(lI.indexOf(num), 1);
+					lI.splice(lI.indexOf(num), 1);
 					this.setState({
 						checkedUsers: lI
 					});
@@ -446,6 +447,9 @@ const Container = React.createClass({
 				padding: "0px 20px 20px 20px",
 				maxHeight: 200,
 				overflow: "scroll"
+			},
+			filterContain: {
+				margin: "0px 0px 10px 0px"
 			}
 		};
 
@@ -527,12 +531,14 @@ const Container = React.createClass({
 								{(this.state.activeTool === "Message Approval") ? 
 									<div>
 										<MediumHeadline headline="Message Approval" />
+										<div style={style.filterContain}><Filter /></div>
 										<MenuList content={this.props.users} checked={this.state.checkedUsers} onClick={this.checkUser} />
 									</div> : 
 								null}
 								{(this.state.activeTool === "Tagging") ?
 									<div> 
 										<MediumHeadline headline="Tagging" />
+										<div style={style.filterContain}><Filter /></div>
 										<MenuList content={this.props.tags} checked={this.state.checkedTags} onClick={this.checkTags} /> 
 									</div> : 
 								null}
