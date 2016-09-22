@@ -224,10 +224,6 @@ const Container = React.createClass({
 				break;
 		}
 	},
-<<<<<<< Updated upstream
-<<<<<<< HEAD
-=======
->>>>>>> Stashed changes
 
 	checkTags(num) {
 
