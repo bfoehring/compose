@@ -29,9 +29,16 @@ const MenuList = React.createClass({
 						function(content, i) {
 
 							const uId = content + "-menuListItem" + i;
+							var checkedState = "";
+
+							for(var c = 0; c < checked.length; c++){
+								if(i === checked[c]) {
+									checkedState = true;
+								}
+							}
 
 							return (
-								<MenuListItem content={content} onClick={onClick} key={uId} id={uId} checked={checked} />
+								<MenuListItem content={content} onClick={() => onClick(i)} key={uId} id={uId} checked={checkedState} />
 							);
 						}
 					)
