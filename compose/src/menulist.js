@@ -3,6 +3,13 @@ import Radium from "radium";
 import MenuListItem from "./menulistitem";
 
 const MenuList = React.createClass({
+
+	getDefaultProps() {
+		return {
+			checked: "",
+		};
+	},
+
 	render() {
 
 		const style = {
@@ -10,7 +17,10 @@ const MenuList = React.createClass({
 				margin: 0,
 				padding: 0
 			}
-		}
+		};
+
+		const onClick = this.props.onClick;
+		const checked = this.props.checked;
 
 		return(
 			<ul style={style.menuList}>
@@ -19,8 +29,17 @@ const MenuList = React.createClass({
 						function(content, i) {
 
 							const uId = content + "-menuListItem" + i;
+							var checkedState = "";
 
-							return <MenuListItem content={content} key={uId} id={uId} />;
+							for(var c = 0; c < checked.length; c++){
+								if(i === checked[c]) {
+									checkedState = true;
+								}
+							}
+
+							return (
+								<MenuListItem content={content} onClick={() => onClick(i)} key={uId} id={uId} checked={checkedState} />
+							);
 						}
 					)
 				}

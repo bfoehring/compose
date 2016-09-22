@@ -50,7 +50,10 @@ const Container = React.createClass({
 			isMinimized: false,
 			showTool: false,
 			activeTool: "",
-			checked: false
+			checkedTags: "",
+			tagsChecked: [],
+			checkedUsers: "",
+			usersChecked: [],
 		};
 	},
 
@@ -219,6 +222,51 @@ const Container = React.createClass({
 			default:
 				console.log("something went wrong");
 				break;
+		}
+	},
+<<<<<<< HEAD
+
+	checkTags(num) {
+
+		var lI = this.state.tagsChecked;
+
+		if(lI.indexOf(num) > -1) {
+			for(var i = 0; i < lI.length; i++) {
+				if(lI[i] === num) {
+					console.log(lI[i]);
+					this.state.listItemsChecked.splice(lI.indexOf(num), 1);
+					this.setState({
+						checkedTags: lI
+					});
+				}
+			}
+		} else {
+			lI.push(num);
+			this.setState({
+				checkedTags: lI
+			});
+		}
+	},
+
+	checkUser(num) {
+
+		var lI = this.state.usersChecked;
+
+		if(lI.indexOf(num) > -1) {
+			for(var i = 0; i < lI.length; i++) {
+				if(lI[i] === num) {
+					console.log(lI[i]);
+					this.state.listItemsChecked.splice(lI.indexOf(num), 1);
+					this.setState({
+						checkedUsers: lI
+					});
+				}
+			}
+		} else {
+			lI.push(num);
+			this.setState({
+				checkedUsers: lI
+			});
 		}
 	},
 	
@@ -480,13 +528,13 @@ const Container = React.createClass({
 								{(this.state.activeTool === "Message Approval") ? 
 									<div>
 										<MediumHeadline headline="Message Approval" />
-										<MenuList content={this.props.users} />
+										<MenuList content={this.props.users} checked={this.state.checkedUsers} onClick={this.checkUser} />
 									</div> : 
 								null}
 								{(this.state.activeTool === "Tagging") ?
 									<div> 
 										<MediumHeadline headline="Tagging" />
-										<MenuList content={this.props.tags} /> 
+										<MenuList content={this.props.tags} checked={this.state.checkedTags} onClick={this.checkTags} /> 
 									</div> : 
 								null}
 							</div> 
