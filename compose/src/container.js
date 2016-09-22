@@ -224,6 +224,7 @@ const Container = React.createClass({
 				break;
 		}
 	},
+<<<<<<< HEAD
 
 	checkTags(num) {
 
