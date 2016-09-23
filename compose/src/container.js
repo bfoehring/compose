@@ -323,7 +323,7 @@ const Container = React.createClass({
 				background: "#fff",
 				boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)",
 				width: 380,
-				height: 290,
+				height: 330,
 				overflow: "scroll",
 				padding: 0,
 				position: "absolute",

@@ -7,12 +7,12 @@ const Filter = React.createClass({
 
 		const style = {
 			filter: {
-				padding: 8,
+				padding: "8px 8px 8px 27px",
 				background: "#fff",
 				border: "1px solid #ddd",
 				color: "#4d4d4d",
 				borderRadius: 3,
-				width: "calc(100% - 16px)",
+				width: "calc(100% - 37px)",
 				fontFamily: "Proxima Nova",
 				fontSize: 14,
 				outline: "none",
@@ -20,11 +20,25 @@ const Filter = React.createClass({
 				":focus": {
 					border: "1px solid 	rgb(89, 203, 89)"
 				}
+			},
+
+			search: {
+				color: "#ddd",
+				position: "relative",
+				top: 24,
+				left: 8
+			},
+
+			contain: {
+				marginTop: -20
 			}
 		};
 
 		return(
-			<input style={style.filter} type="text" placeholder="Narrow results..." onChange={this.props.onChange} />
+			<div style={style.contain}>
+				<i style={style.search} className="fa fa-search" aria-hidden="true"></i>
+				<input style={style.filter} type="text" placeholder="Narrow results..." onChange={this.props.onChange} />
+			</div>
 		);
 	}
 });
