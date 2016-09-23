@@ -222,7 +222,8 @@ const Container = React.createClass({
 			case name:
 				if(this.state.showTool && this.state.activeTool === name) {
 					this.setState({
-						showTool: false
+						showTool: false,
+						activeTool: ""
 					});
 				} else {
 					this.setState({
@@ -322,7 +323,7 @@ const Container = React.createClass({
 				background: "#fff",
 				boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)",
 				width: 380,
-				height: 340,
+				height: 290,
 				overflow: "scroll",
 				padding: 0,
 				position: "absolute",
@@ -481,11 +482,17 @@ const Container = React.createClass({
 				float: "left",
 				margin: "5px 5px 0px 0px",
 			},
+
 			toolContainer: {
 				padding: "0px 20px 20px 20px",
 				maxHeight: 200,
 				overflow: "scroll"
 			},
+
+			minToolContainer: {
+				padding: "0px 20px 20px 20px",
+			},
+
 			filterContain: {
 				margin: "0px 0px 10px 0px"
 			}
@@ -555,13 +562,13 @@ const Container = React.createClass({
 						{
 							this.state.showTip ? <InfoTip tipPosition={this.state.tipPosition} featureDescription={this.state.tipDescription} /> : null
 						}
-						<ButtonGroup key="six" content={this.state.availableTools} showTip={this.showTip} showTool={this.showTool} />
+						<ButtonGroup key="six" content={this.state.availableTools} showTip={this.showTip} showTool={this.showTool} activeTool={this.state.activeTool}/>
 					</div>
 				</div>
 				<div>
 					{
 						this.state.showTool ? 
-							<div style={style.toolContainer}>
+							<div style={this.state.isMinimized ? style.minToolContainer : style.toolContainer}>
 								{(this.state.activeTool === "Scheduling Options") ? <MediumHeadline headline="Scheduling Options" /> : null}
 								{(this.state.activeTool === "Queue Options") ? <MediumHeadline headline="Queue Options" /> : null}
 								{(this.state.activeTool === "Media") ? <MediumHeadline headline="Media" /> : null}

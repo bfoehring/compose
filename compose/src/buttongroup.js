@@ -17,6 +17,14 @@ const style = {
 		borderRight: "none",
 		width: 36
 	},
+	activeStyles: {
+		background: "#b3b3b3",
+		color: "#fff",
+
+		":hover": {
+			cursor: "pointer"
+		}
+	}
 };
 
 const ButtonGroup = React.createClass({
@@ -25,6 +33,7 @@ const ButtonGroup = React.createClass({
 
 		const showTip = this.props.showTip;
 		const showTool = this.props.showTool;
+		const activeTool = this.props.activeTool;
 
 		return(
 			<ul style={style.buttongroup} id="poo">
@@ -34,17 +43,19 @@ const ButtonGroup = React.createClass({
 						var idKey = content.toolName + "-buttonGroup";
 						const firstStyles = (i === 0) ? style.firstButtonGroupItem : {};
 						const lastStyles = (i === allContent.length - 1) ? style.lastButtonGroupItem : {};
+						const aOinA = (activeTool === content.toolName) ? style.activeStyles : null;
 
 						return <ButtonGroupItem 
 									content={content} 
 									key={i} 
 									id={idKey} 
 									buttonIndex={i} 
-									style={Object.assign(firstStyles, lastStyles)} 
+									style={[aOinA, Object.assign(firstStyles, lastStyles)]} 
 									featureDescription={content.toolName} 
 									showTip={showTip}
 									showTool={showTool} 
 									toolIcon={content.toolIcon}
+									activeTool={activeTool}
 								/>;
 					}
 				)}
