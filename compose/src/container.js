@@ -30,7 +30,7 @@ const Container = React.createClass({
 			},
 			messageTypes: ["Compose", "Schedule", "Queue", "Draft"],
 			users: ["Arnita Hayden", "Bill Foehring", "Henry Millison", "Cory Danielson", "Brian Cordionnier", "Ryan Skurkis", "Austin Gundry", "Viju Hullur"],
-			tags: ["#sproutsocial", "social media", "sprout coffee", "YOLO", "getsocial", "#productideas", "customer support", "compose 2.0", "new compose"],
+			tags: ["sproutsocial", "social media", "sprout coffee", "YOLO", "getsocial", "productideas", "customer support", "compose 2.0", "new compose"],
 		};
 	},
 
@@ -53,9 +53,20 @@ const Container = React.createClass({
 			activeTool: "",
 			checkedTags: "",
 			tagsChecked: [],
+			unfilteredTags: this.props.tags,
+			filteredTags: "",
 			checkedUsers: "",
 			usersChecked: [],
+			unfilteredUsers: this.props.users,
+			filteredUsers: "",
 		};
+	},
+
+	componentWillMount() {
+		this.setState({
+			filteredTags: this.state.unfilteredTags,
+			filteredUsers: this.state.unfilteredUsers
+		});
 	},
 
 	showPicker() {
@@ -246,6 +257,7 @@ const Container = React.createClass({
 				checkedTags: lI
 			});
 		}
+		console.log(this.state.checkedTags);
 	},
 
 	checkUser(num) {
@@ -268,6 +280,32 @@ const Container = React.createClass({
 				checkedUsers: lI
 			});
 		}
+	},
+
+	filterTagList(e) {
+		var updatedList= this.state.unfilteredTags;
+
+		updatedList = updatedList.filter(function(item){
+			return item.toLowerCase().search(
+				e.target.value.toLowerCase()
+			) !== -1 ;
+		});
+		this.setState({
+			filteredTags: updatedList
+		});
+	},
+
+	filterUserList(e) {
+		var updatedList= this.state.unfilteredUsers;
+
+		updatedList = updatedList.filter(function(item){
+			return item.toLowerCase().search(
+				e.target.value.toLowerCase()
+			) !== -1 ;
+		});
+		this.setState({
+			filteredUsers: updatedList
+		});
 	},
 	
 	render() {
@@ -531,15 +569,15 @@ const Container = React.createClass({
 								{(this.state.activeTool === "Message Approval") ? 
 									<div>
 										<MediumHeadline headline="Message Approval" />
-										<div style={style.filterContain}><Filter /></div>
-										<MenuList content={this.props.users} checked={this.state.checkedUsers} onClick={this.checkUser} />
+										<div style={style.filterContain}><Filter onChange={this.filterUserList} /></div>
+										<MenuList content={this.state.filteredUsers} checked={this.state.checkedUsers} onClick={this.checkUser} />
 									</div> : 
 								null}
 								{(this.state.activeTool === "Tagging") ?
 									<div> 
 										<MediumHeadline headline="Tagging" />
-										<div style={style.filterContain}><Filter /></div>
-										<MenuList content={this.props.tags} checked={this.state.checkedTags} onClick={this.checkTags} /> 
+										<div style={style.filterContain}><Filter onChange={this.filterTagList}/></div>
+										<MenuList content={this.state.filteredTags} checked={this.state.checkedTags} onClick={this.checkTags} /> 
 									</div> : 
 								null}
 							</div> 

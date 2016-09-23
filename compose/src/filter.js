@@ -24,7 +24,7 @@ const Filter = React.createClass({
 		};
 
 		return(
-			<input style={style.filter} type="text" placeholder="Narrow results..." />
+			<input style={style.filter} type="text" placeholder="Narrow results..." onChange={this.props.onChange} />
 		);
 	}
 });
