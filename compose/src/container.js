@@ -341,7 +341,7 @@ const Container = React.createClass({
 				background: "#fff",
 				boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)",
 				width: 680,
-				padding: 0
+				padding: 0,
 			},
 
 			minimize: {
@@ -353,7 +353,7 @@ const Container = React.createClass({
 				padding: 0,
 				position: "absolute",
 				bottom: 0,
-				right: 0,
+				right: 10
 			},
 
 			bottomBar: {
@@ -554,7 +554,7 @@ const Container = React.createClass({
 		var isMinimized = this.state.isMinimized;
 
 		return(
-			<Draggable axis={isMinimized ? "x" : "both"} bounds={"html"}>
+			<Draggable handle=".handle" axis={isMinimized ? "x" : "both"} bounds={"html"}>
 				<div style={this.state.isMinimized ? style.minimize : style.container}>
 					<div style={style.topBar} className="handle">
 						<div style={style.messageTypeDisplay}>
