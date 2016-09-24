@@ -6,12 +6,12 @@ import Button from "./button";
 import TextArea from "./textarea";
 import ButtonGroup from "./buttongroup";
 import List from "./list";
-import MessageTypePicker from "./messagetypepicker";
 import ProfilePicker from "./profilepicker";
 import InfoTip from "./infotip";
 import MediumHeadline from "./mediumheadline";
 import MenuList from "./menulist";
 import Filter from "./filter";
+import Checkbox from "./checkbox";
 
 const Container = React.createClass({
 
@@ -22,12 +22,15 @@ const Container = React.createClass({
 			iconColor: 'black',
 			profiles: ["15charactername", "16charactername", "17charactername", "bill_foehring", "anotherHandle"],
 			textRows: "4",
-			availableTools: {
-				schedulingTools: [{toolName: "Scheduling Options", toolIcon: "fa fa-calendar"}, {toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}, {toolName: "Message Approval", toolIcon: "fa fa-check-circle"}],
-				queueTools: [{toolName: "Queue Options", toolIcon: "fa fa-hourglass-half"}, {toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}, {toolName: "Message Approval", toolIcon: "fa fa-check-circle"}],
-				draftTools: [{toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}, {toolName: "Message Approval", toolIcon: "fa fa-check-circle"}],
-				composeTools: [{toolName: "Media", toolIcon: "fa fa-paperclip"}, {toolName: "Targeting", toolIcon: "fa fa-bullseye"}, {toolName: "Tagging", toolIcon: "fa fa-tag"}],
-			},
+			availableTools: [
+				{toolName: "Scheduling Options", toolIcon: "fa fa-calendar"}, 
+				{toolName: "Queue Options", toolIcon: "fa fa-hourglass-half"}, 
+				{toolName: "Make Draft", toolIcon: "fa fa-file-text"},
+				{toolName: "Media", toolIcon: "fa fa-paperclip"}, 
+				{toolName: "Targeting", toolIcon: "fa fa-bullseye"}, 
+				{toolName: "Tagging", toolIcon: "fa fa-tag"}, 
+				{toolName: "Message Approval", toolIcon: "fa fa-check-circle"}
+			],
 			messageTypes: ["Compose", "Schedule", "Queue", "Draft"],
 			users: ["Arnita Hayden", "Bill Foehring", "Henry Millison", "Cory Danielson", "Brian Cordionnier", "Ryan Skurkis", "Austin Gundry", "Viju Hullur"],
 			tags: ["sproutsocial", "social media", "sprout coffee", "YOLO", "getsocial", "productideas", "customer support", "compose 2.0", "new compose"],
@@ -43,7 +46,7 @@ const Container = React.createClass({
 			isInactive: true,
 			isMessagePickerShown: false,
 			showToken: false,
-			availableTools: this.props.availableTools.composeTools,
+			availableTools: this.props.availableTools,
 			isEmpty: true,
 			showTip: false,
 			tipDescription: "",
@@ -59,56 +62,17 @@ const Container = React.createClass({
 			usersChecked: [],
 			unfilteredUsers: this.props.users,
 			filteredUsers: "",
+			enableSchedule: false,
+			enableQueue: false,
+			enableDraft: false
 		};
 	},
 
 	componentWillMount() {
 		this.setState({
 			filteredTags: this.state.unfilteredTags,
-			filteredUsers: this.state.unfilteredUsers
+			filteredUsers: this.state.unfilteredUsers,
 		});
-	},
-
-	showPicker() {
-		this.setState({
-			isPickerShown: !this.state.isPickerShown,
-			isMessagePickerShown: false
-		});
-	},
-
-	changeMessageType(e) {
-
-		this.showPicker();
-		this.setState({
-			activeTool: "",
-			showTool: false
-		});
-
-		if(e.currentTarget.id === "Schedule-list") {
-			this.setState({
-				messageType: "Schedule",
-				buttonText: "Schedule",
-				availableTools: this.props.availableTools.schedulingTools
-			});
-		} else if (e.currentTarget.id === "Queue-list") {
-			this.setState({
-				messageType: "Queue",
-				buttonText: "Queue",
-				availableTools: this.props.availableTools.queueTools
-			});
-		} else if (e.currentTarget.id === "Draft-list") {
-			this.setState({
-				messageType: "Draft",
-				buttonText: "Draft",
-				availableTools: this.props.availableTools.draftTools
-			});
-		} else if (e.currentTarget.id === "Compose-list") {
-			this.setState({
-				messageType: "Compose",
-				buttonText: "Send",
-				availableTools: this.props.availableTools.composeTools
-			});
-		}
 	},
 
 	showMessageTypes() {
@@ -308,6 +272,66 @@ const Container = React.createClass({
 			filteredUsers: updatedList
 		});
 	},
+
+	toggleMessageType(messageType) {
+		
+		switch(messageType) {
+			case "Schedule":
+				if(this.state.enableSchedule) {
+					this.setState({
+						enableSchedule: false,
+						messageType: "Compose",
+						buttonText: "Send"
+					});
+				} else {
+					this.setState({
+						enableSchedule: true,
+						enableQueue: false,
+						enableDraft: false,
+						messageType: messageType,
+						buttonText: messageType,
+					});	
+				}
+				break;
+			case "Queue":
+				if(this.state.enableQueue) {
+					this.setState({
+						enableQueue: false,
+						messageType: "Compose",
+						buttonText: "Send"
+					});
+				} else {
+					this.setState({
+						enableQueue: true,
+						enableSchedule: false,
+						enableDraft: false,
+						messageType: messageType,
+						buttonText: messageType,
+					});	
+				}
+				break;
+			case "Draft":
+				if(this.state.enableDraft) {
+					this.setState({
+						enableDraft: false,
+						messageType: "Compose",
+						buttonText: "Send"
+					});
+				} else {
+					this.setState({
+						enableDraft: true,
+						enableSchedule: false,
+						enableQueue: false,
+						messageType: messageType,
+						buttonText: messageType,
+					});	
+				}
+				break;
+			default:
+				console.log("error");
+				break;
+		}
+	},
 	
 	render() {
 
@@ -322,7 +346,7 @@ const Container = React.createClass({
 			minimize: {
 				background: "#fff",
 				boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)",
-				width: 380,
+				width: 452,
 				height: 330,
 				overflow: "scroll",
 				padding: 0,
@@ -345,7 +369,7 @@ const Container = React.createClass({
 			},
 
 			buttonGroupContainer: {
-				width: "60%",
+				width: "70%",
 				float: "left",
 				margin: 0
 			},
@@ -376,15 +400,12 @@ const Container = React.createClass({
 				zIndex: 4000
 			},
 
-			messageTypePicker: {
+			messageTypeDisplay: {
+				fontFamily: "Proxima Nova",
 				background: "#4d4d4d",
 				padding: 10,
 				float: "left",
-
-				":hover": {
-					background: "#333",
-					cursor: "pointer"
-				}
+				color: "#fff"
 			},
 
 			profilePickerContain: {
@@ -399,13 +420,6 @@ const Container = React.createClass({
 					color: "#1a1a1a",
 					cursor: "pointer",
 				}
-			},
-
-			messageTypeMenu: {
-				position: "absolute",
-				top: 46,
-				left: 8,
-				zIndex: 1000
 			},
 
 			messageTypeChevDown: {
@@ -495,6 +509,17 @@ const Container = React.createClass({
 
 			filterContain: {
 				margin: "0px 0px 10px 0px"
+			},
+
+			checkboxContain: {
+				float: "left",
+				margin: "0px 10px 0px 0px",
+			},
+
+			label: {
+				fontFamily: "Proxima Nova",
+				fontSize: 16,
+				color: "#333"
 			}
 		};
 
@@ -524,12 +549,8 @@ const Container = React.createClass({
 		return(
 			<div style={this.state.isMinimized ? style.minimize : style.container}>
 				<div style={style.topBar}>
-					<div style={style.messageTypePicker} key="one" onClick={this.showPicker}>
-						<MessageTypePicker messageType={this.state.messageType + " " + "New Message"} key="five" />
-						<i className="fa fa-angle-down" key="two" style={this.state.isPickerShown ? style.messageTypeChevUp : style.messageTypeChevDown} aria-hidden="true"></i>
-					</div>
-					<div style={style.messageTypeMenu}>
-						{this.state.isPickerShown ? <List listItem={availableMessageTypes} handle={this.changeMessageType} /> : null}
+					<div style={style.messageTypeDisplay}>
+						{this.state.messageType + " " + "New Message"}
 					</div>
 					<div style={style.close} key="close-action" onClick={this.props._close}>
 						<i className="fa fa-times fa-fw" aria-hidden="true"></i>
@@ -569,8 +590,33 @@ const Container = React.createClass({
 					{
 						this.state.showTool ? 
 							<div style={this.state.isMinimized ? style.minToolContainer : style.toolContainer}>
-								{(this.state.activeTool === "Scheduling Options") ? <MediumHeadline headline="Scheduling Options" /> : null}
-								{(this.state.activeTool === "Queue Options") ? <MediumHeadline headline="Queue Options" /> : null}
+								{(this.state.activeTool === "Scheduling Options") ?
+									<div> 
+										<MediumHeadline headline="Scheduling Options" /> 
+										<div style={style.checkboxContain}>
+											<Checkbox checked={this.state.enableSchedule} onClick={this.toggleMessageType.bind(null, "Schedule")} />
+										</div>
+										<span style={style.label}>Schedule Message</span> 
+									</div> : 
+								null}
+								{(this.state.activeTool === "Queue Options") ? 
+									<div>
+										<MediumHeadline headline="Queue Options" />
+										<div style={style.checkboxContain}>
+											<Checkbox checked={this.state.enableQueue} onClick={this.toggleMessageType.bind(null, "Queue")} />
+										</div>
+										<span style={style.label}>Queue Message</span>
+									</div> : 
+								null}
+								{(this.state.activeTool === "Make Draft") ? 
+									<div>
+										<MediumHeadline headline="Make Draft" />
+										<div style={style.checkboxContain}>
+											<Checkbox checked={this.state.enableDraft} onClick={this.toggleMessageType.bind(null, "Draft")} />
+										</div>
+										<span style={style.label}>Make Draft</span>
+									</div> : 
+								null}
 								{(this.state.activeTool === "Media") ? <MediumHeadline headline="Media" /> : null}
 								{(this.state.activeTool === "Targeting") ? <MediumHeadline headline="Targeting" /> : null}
 								{(this.state.activeTool === "Message Approval") ? 

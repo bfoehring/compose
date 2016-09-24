@@ -6,6 +6,8 @@ const Checkbox = React.createClass({
 	getDefaultProps() {
 		return {
 			checked: "",
+			label: "",
+			labelText: "",
 		};
 	},
 
@@ -17,8 +19,11 @@ const Checkbox = React.createClass({
 				borderRadius: 3,
 				border: "1px solid rgb(89, 203, 89)",
 				padding: 2,
+				height: 14,
+				width: 13,
 				background: "rgb(89, 203, 89)",
 				fontSize: 12,
+				margin: 0,
 
 				":hover": {
 					cursor: "pointer",
@@ -30,20 +35,26 @@ const Checkbox = React.createClass({
 				borderRadius: 3,
 				border: "1px solid #eee",
 				padding: 2,
+				height: 14,
+				width: 13,
 				fontSize: 12,
 				background: "#fff",
+				margin: 0,
 
 				":hover": {
 					color: "#eee",
 					cursor: "pointer",
 					background: "#fff"
 				}
-			}
+			},
 		};
 
 		return(
 			<div>
-				{this.props.checked ? <div style={style.checked}><i className="fa fa-check" aria-hidden="true"></i></div> : <div style={style.unChecked}><i className="fa fa-check" aria-hidden="true"></i></div>}
+				{this.props.checked ? 
+					<div style={style.checked} onClick={this.props.onClick}><i className="fa fa-check" aria-hidden="true"></i></div> : 
+					<div style={style.unChecked} onClick={this.props.onClick}><i className="fa fa-check" aria-hidden="true"></i></div>
+				}
 			</div>
 		);
 	}
