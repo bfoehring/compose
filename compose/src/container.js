@@ -12,6 +12,7 @@ import MediumHeadline from "./mediumheadline";
 import MenuList from "./menulist";
 import Filter from "./filter";
 import Checkbox from "./checkbox";
+import Draggable from "react-draggable";
 
 const Container = React.createClass({
 
@@ -64,7 +65,7 @@ const Container = React.createClass({
 			filteredUsers: "",
 			enableSchedule: false,
 			enableQueue: false,
-			enableDraft: false
+			enableDraft: false,
 		};
 	},
 
@@ -173,7 +174,7 @@ const Container = React.createClass({
 
 	minimize() {
 		this.setState({
-			isMinimized: !this.state.isMinimized
+			isMinimized: !this.state.isMinimized,
 		});
 	},
 
@@ -352,7 +353,7 @@ const Container = React.createClass({
 				padding: 0,
 				position: "absolute",
 				bottom: 0,
-				right: 20,
+				right: 0,
 			},
 
 			bottomBar: {
@@ -378,6 +379,10 @@ const Container = React.createClass({
 				background: "#4d4d4e",
 				float: "left",
 				width: "100%",
+
+				":hover": {
+					cursor: "move"
+				}
 			},
 
 			profilePickerBar: {
@@ -546,98 +551,102 @@ const Container = React.createClass({
 			arrowStyle = style.profPickChevUp;
 		}
 
+		var isMinimized = this.state.isMinimized;
+
 		return(
-			<div style={this.state.isMinimized ? style.minimize : style.container}>
-				<div style={style.topBar}>
-					<div style={style.messageTypeDisplay}>
-						{this.state.messageType + " " + "New Message"}
+			<Draggable axis={isMinimized ? "x" : "both"} bounds={"html"}>
+				<div style={this.state.isMinimized ? style.minimize : style.container}>
+					<div style={style.topBar} className="handle">
+						<div style={style.messageTypeDisplay}>
+							{this.state.messageType + " " + "New Message"}
+						</div>
+						<div style={style.close} key="close-action" onClick={this.props._close}>
+							<i className="fa fa-times fa-fw" aria-hidden="true"></i>
+						</div>
+						<div style={style.minimizeContainer} key="minimize-action" onClick={this.minimize}>
+							<i className="fa fa-minus fa-fw" aria-hidden="true"></i>
+						</div>
 					</div>
-					<div style={style.close} key="close-action" onClick={this.props._close}>
-						<i className="fa fa-times fa-fw" aria-hidden="true"></i>
-					</div>
-					<div style={style.minimizeContainer} key="minimize-action" onClick={this.minimize}>
-						<i className="fa fa-minus fa-fw" aria-hidden="true"></i>
-					</div>
-				</div>
 
-				<div style={style.profilePickerBar}>
-					<div style={style.profilePickerContain} key="three" onClick={this.showMessageTypes}>
-						<i className={this.props.icon} aria-hidden="true" style={this.state.showToken ? style.networkIconToken : style.networkIcon}></i>
-						<ProfilePicker isEmpty={this.state.isEmpty} selectedProfiles={this.state.selectedProfiles} addProfiles={this.addProfiles}/>
-						<i className="fa fa-angle-down" key="four" style={arrowStyle} aria-hidden="true"></i>
+					<div style={style.profilePickerBar}>
+						<div style={style.profilePickerContain} key="three" onClick={this.showMessageTypes}>
+							<i className={this.props.icon} aria-hidden="true" style={this.state.showToken ? style.networkIconToken : style.networkIcon}></i>
+							<ProfilePicker isEmpty={this.state.isEmpty} selectedProfiles={this.state.selectedProfiles} addProfiles={this.addProfiles}/>
+							<i className="fa fa-angle-down" key="four" style={arrowStyle} aria-hidden="true"></i>
+						</div>
+						<div style={menuStyle}>
+							{this.state.isMessagePickerShown ? <List listItem={this.props.profiles} handle={this.addProfiles} /> : null}
+						</div>
 					</div>
-					<div style={menuStyle}>
-						{this.state.isMessagePickerShown ? <List listItem={this.props.profiles} handle={this.addProfiles} /> : null}
-					</div>
-				</div>
 
-				<div style={style.textAreaContainer}>
-					<TextArea rows={this.props.textRows} />
-				</div>
-
-				<div style={style.bottomBar}>
-					<div style={style.buttonContainer}>
-						<Button key="five" buttonText={this.state.buttonText} _onClick={this.send} />
+					<div style={style.textAreaContainer}>
+						<TextArea rows={this.props.textRows} />
 					</div>
-					<div style={style.buttonGroupContainer}>
+
+					<div style={style.bottomBar}>
+						<div style={style.buttonContainer}>
+							<Button key="five" buttonText={this.state.buttonText} _onClick={this.send} />
+						</div>
+						<div style={style.buttonGroupContainer}>
+							{
+								this.state.showTip ? <InfoTip tipPosition={this.state.tipPosition} featureDescription={this.state.tipDescription} /> : null
+							}
+							<ButtonGroup key="six" content={this.state.availableTools} showTip={this.showTip} showTool={this.showTool} activeTool={this.state.activeTool}/>
+						</div>
+					</div>
+					<div>
 						{
-							this.state.showTip ? <InfoTip tipPosition={this.state.tipPosition} featureDescription={this.state.tipDescription} /> : null
+							this.state.showTool ? 
+								<div style={this.state.isMinimized ? style.minToolContainer : style.toolContainer}>
+									{(this.state.activeTool === "Scheduling Options") ?
+										<div> 
+											<MediumHeadline headline="Scheduling Options" /> 
+											<div style={style.checkboxContain}>
+												<Checkbox checked={this.state.enableSchedule} onClick={this.toggleMessageType.bind(null, "Schedule")} />
+											</div>
+											<span style={style.label}>Schedule Message</span> 
+										</div> : 
+									null}
+									{(this.state.activeTool === "Queue Options") ? 
+										<div>
+											<MediumHeadline headline="Queue Options" />
+											<div style={style.checkboxContain}>
+												<Checkbox checked={this.state.enableQueue} onClick={this.toggleMessageType.bind(null, "Queue")} />
+											</div>
+											<span style={style.label}>Queue Message</span>
+										</div> : 
+									null}
+									{(this.state.activeTool === "Make Draft") ? 
+										<div>
+											<MediumHeadline headline="Make Draft" />
+											<div style={style.checkboxContain}>
+												<Checkbox checked={this.state.enableDraft} onClick={this.toggleMessageType.bind(null, "Draft")} />
+											</div>
+											<span style={style.label}>Make Draft</span>
+										</div> : 
+									null}
+									{(this.state.activeTool === "Media") ? <MediumHeadline headline="Media" /> : null}
+									{(this.state.activeTool === "Targeting") ? <MediumHeadline headline="Targeting" /> : null}
+									{(this.state.activeTool === "Message Approval") ? 
+										<div>
+											<MediumHeadline headline="Message Approval" />
+											<div style={style.filterContain}><Filter onChange={this.filterUserList} /></div>
+											<MenuList content={this.state.filteredUsers} checked={this.state.checkedUsers} onClick={this.checkUser} />
+										</div> : 
+									null}
+									{(this.state.activeTool === "Tagging") ?
+										<div> 
+											<MediumHeadline headline="Tagging" />
+											<div style={style.filterContain}><Filter onChange={this.filterTagList}/></div>
+											<MenuList content={this.state.filteredTags} checked={this.state.checkedTags} onClick={this.checkTags} /> 
+										</div> : 
+									null}
+								</div> 
+							: null
 						}
-						<ButtonGroup key="six" content={this.state.availableTools} showTip={this.showTip} showTool={this.showTool} activeTool={this.state.activeTool}/>
 					</div>
 				</div>
-				<div>
-					{
-						this.state.showTool ? 
-							<div style={this.state.isMinimized ? style.minToolContainer : style.toolContainer}>
-								{(this.state.activeTool === "Scheduling Options") ?
-									<div> 
-										<MediumHeadline headline="Scheduling Options" /> 
-										<div style={style.checkboxContain}>
-											<Checkbox checked={this.state.enableSchedule} onClick={this.toggleMessageType.bind(null, "Schedule")} />
-										</div>
-										<span style={style.label}>Schedule Message</span> 
-									</div> : 
-								null}
-								{(this.state.activeTool === "Queue Options") ? 
-									<div>
-										<MediumHeadline headline="Queue Options" />
-										<div style={style.checkboxContain}>
-											<Checkbox checked={this.state.enableQueue} onClick={this.toggleMessageType.bind(null, "Queue")} />
-										</div>
-										<span style={style.label}>Queue Message</span>
-									</div> : 
-								null}
-								{(this.state.activeTool === "Make Draft") ? 
-									<div>
-										<MediumHeadline headline="Make Draft" />
-										<div style={style.checkboxContain}>
-											<Checkbox checked={this.state.enableDraft} onClick={this.toggleMessageType.bind(null, "Draft")} />
-										</div>
-										<span style={style.label}>Make Draft</span>
-									</div> : 
-								null}
-								{(this.state.activeTool === "Media") ? <MediumHeadline headline="Media" /> : null}
-								{(this.state.activeTool === "Targeting") ? <MediumHeadline headline="Targeting" /> : null}
-								{(this.state.activeTool === "Message Approval") ? 
-									<div>
-										<MediumHeadline headline="Message Approval" />
-										<div style={style.filterContain}><Filter onChange={this.filterUserList} /></div>
-										<MenuList content={this.state.filteredUsers} checked={this.state.checkedUsers} onClick={this.checkUser} />
-									</div> : 
-								null}
-								{(this.state.activeTool === "Tagging") ?
-									<div> 
-										<MediumHeadline headline="Tagging" />
-										<div style={style.filterContain}><Filter onChange={this.filterTagList}/></div>
-										<MenuList content={this.state.filteredTags} checked={this.state.checkedTags} onClick={this.checkTags} /> 
-									</div> : 
-								null}
-							</div> 
-						: null
-					}
-				</div>
-			</div>
+			</Draggable>
 		);
 	}
 
