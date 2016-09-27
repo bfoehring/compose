@@ -401,15 +401,15 @@ const Container = React.createClass({
 
 			profPickerMenu: {
 				position: "absolute",
-				top: 84,
-				left: 8,
+				top: 76,
+				left: 0,
 				zIndex: 4000
 			},
 
 			menuWithToken: {
 				position: "absolute",
-				top: 92,
-				left: 8,
+				top: 84,
+				left: 0,
 				zIndex: 4000
 			},
 
@@ -532,7 +532,33 @@ const Container = React.createClass({
 			label: {
 				fontFamily: "Proxima Nova",
 				fontSize: 16,
-				color: "#333"
+				color: "#333",
+			},
+
+			mediaList: {
+				padding: 0,
+				margin: 0,
+			},
+
+			mediaItem: {
+				listStyle: "none",
+				display: "inline-block",
+				fontSize: 38,
+				color: "#b3b3b3",
+				margin: "0px 30px 0px 0px",
+				textAlign: "center",
+
+				":hover": {
+					color: "rgb(23, 184, 206)",
+					cursor: "pointer"
+				}
+			},
+
+			mediaLabel: {
+				fontFamily: "Proxima Nova",
+				fontSize: 16,
+				color: "#333",
+				marginBottom: 0
 			}
 		};
 
@@ -612,7 +638,7 @@ const Container = React.createClass({
 											<div style={style.checkboxContain}>
 												<Checkbox checked={this.state.enableSchedule} onClick={this.toggleMessageType.bind(null, "Schedule")} />
 											</div>
-											<span style={style.label}>Schedule Message</span> 
+											<span style={style.label}>Schedule Message</span>
 										</div> : 
 									null}
 									{(this.state.activeTool === "Queue Options") ? 
@@ -633,7 +659,21 @@ const Container = React.createClass({
 											<span style={style.label}>Make Draft</span>
 										</div> : 
 									null}
-									{(this.state.activeTool === "Media") ? <MediumHeadline headline="Media" /> : null}
+									{(this.state.activeTool === "Media") ?
+										<div> 
+											<MediumHeadline headline="Media" />
+											<ul style={style.mediaList}>
+												<li style={style.mediaItem} key="listImage">
+													<i className="fa fa-file-image-o" aria-hidden="true"></i>
+													<p style={style.mediaLabel}>Upload Image</p>
+												</li>
+												<li style={style.mediaItem} key="listLibrary">
+													<i className="fa fa-bank" aria-hidden="true"></i>
+													<p style={style.mediaLabel}>Asset Library</p>
+												</li>
+											</ul> 
+										</div> : 
+									null}
 									{(this.state.activeTool === "Targeting") ? <MediumHeadline headline="Targeting" /> : null}
 									{(this.state.activeTool === "Message Approval") ? 
 										<div>
