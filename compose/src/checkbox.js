@@ -33,7 +33,7 @@ const Checkbox = React.createClass({
 			unChecked: {
 				color: "#fff",
 				borderRadius: 3,
-				border: "1px solid #eee",
+				border: "1px solid #e6e6e6",
 				padding: 2,
 				height: 14,
 				width: 13,
@@ -42,7 +42,7 @@ const Checkbox = React.createClass({
 				margin: 0,
 
 				":hover": {
-					color: "#eee",
+					color: "#e6e6e6",
 					cursor: "pointer",
 					background: "#fff"
 				}

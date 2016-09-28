@@ -12,6 +12,8 @@ import MediumHeadline from "./mediumheadline";
 import MenuList from "./menulist";
 import Filter from "./filter";
 import Draggable from "react-draggable";
+import TextLink from "./textlink";
+import Radio from "./radio";
 
 const Container = React.createClass({
 
@@ -28,11 +30,13 @@ const Container = React.createClass({
 				{toolName: "Media", toolIcon: "fa fa-paperclip"}, 
 				{toolName: "Targeting", toolIcon: "fa fa-bullseye"}, 
 				{toolName: "Tagging", toolIcon: "fa fa-tag"}, 
-				{toolName: "Message Approval", toolIcon: "fa fa-check-circle"}
+				{toolName: "Message Approval", toolIcon: "fa fa-check-circle"},
+				{toolName: "More Options", toolIcon: "fa fa-ellipsis-h"}
 			],
 			messageTypes: ["Compose", "Schedule", "Queue", "Draft"],
 			users: ["Arnita Hayden", "Bill Foehring", "Henry Millison", "Cory Danielson", "Brian Cordionnier", "Ryan Skurkis", "Austin Gundry", "Viju Hullur"],
 			tags: ["sproutsocial", "social media", "sprout coffee", "YOLO", "getsocial", "productideas", "customer support", "compose 2.0", "new compose"],
+			queueOptions: ["Queue Next", "Queue Last"]
 		};
 	},
 
@@ -66,7 +70,8 @@ const Container = React.createClass({
 			position: {
 				x: 0,
 				y: 0
-			}
+			},
+			radioActive: 0
 		};
 	},
 
@@ -134,17 +139,25 @@ const Container = React.createClass({
 		switch(this.state.buttonText) {
 			case "Send":
 				alert("your message was sent");
+				this.props._close();
 				break;
 			case "Schedule":
 				alert("your message was scheduled");
+				this.props._close();
 				break;
 			case "Queue":
 				alert("your message was queued");
+				this.props._close();
 				break;
 			default:
 				alert("there was an error");
 				break;
 		}
+	},
+
+	draft() {
+		alert("Your message has been saved");
+		this.props._close();
 	},
 
 	showTip(e) {
@@ -311,6 +324,12 @@ const Container = React.createClass({
 
 		console.log(name);
 	},
+
+	queueNextLast(num) {
+		this.setState({
+			radioActive: num
+		});
+	},
 	
 	render() {
 
@@ -343,12 +362,12 @@ const Container = React.createClass({
 			},
 
 			buttonContainer: {
-				width: "30%",
+				width: "25%",
 				float: "right"
 			},
 
 			buttonGroupContainer: {
-				width: "70%",
+				//width: "65%",
 				float: "left",
 				margin: 0
 			},
@@ -529,6 +548,16 @@ const Container = React.createClass({
 				fontSize: 16,
 				color: "#333",
 				marginBottom: 0
+			},
+
+			draftContainer: {
+				float: "right",
+				margin: "0px 10px 0px 0px",
+				width: "16%"
+			},
+
+			queueRadioContain: {
+				float: "left"
 			}
 		};
 
@@ -591,6 +620,9 @@ const Container = React.createClass({
 						<div style={style.buttonContainer}>
 							<Button key="five" buttonText={this.state.buttonText} _onClick={this.send} />
 						</div>
+						<div style={style.draftContainer} key="draftContainer" onClick={this.draft}>
+							<TextLink textLinkName="Save Draft" />
+						</div>
 						<div style={style.buttonGroupContainer}>
 							{
 								this.state.showTip ? <InfoTip tipPosition={this.state.tipPosition} featureDescription={this.state.tipDescription} /> : null
@@ -618,6 +650,9 @@ const Container = React.createClass({
 									{(this.state.activeTool === "Queue") ? 
 										<div>
 											<MediumHeadline headline="Queue Options" />
+											<div style={style.queueRadioContain}>
+												<Radio options={this.props.queueOptions} radioActive={this.state.radioActive} onClick={this.queueNextLast} />
+											</div>
 										</div> : 
 									null}
 									{(this.state.activeTool === "Media") ?
@@ -648,6 +683,11 @@ const Container = React.createClass({
 											<MediumHeadline headline="Tagging" />
 											<div style={style.filterContain}><Filter onChange={this.filterTagList}/></div>
 											<MenuList content={this.state.filteredTags} checked={this.state.checkedTags} onClick={this.checkTags} /> 
+										</div> : 
+									null}
+									{(this.state.activeTool === "More Options") ?
+										<div> 
+											<MediumHeadline headline="More Options" />
 										</div> : 
 									null}
 								</div> 
