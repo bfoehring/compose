@@ -24,6 +24,9 @@ const style = {
 		":hover": {
 			cursor: "pointer"
 		}
+	},
+	activeMessageType: {
+		color: "rgb(23, 184, 206)"
 	}
 };
 
@@ -34,6 +37,8 @@ const ButtonGroup = React.createClass({
 		const showTip = this.props.showTip;
 		const showTool = this.props.showTool;
 		const activeTool = this.props.activeTool;
+		const enableSchedule = this.props.enableSchedule;
+		const enableQueue = this.props.enableQueue;
 
 		return(
 			<ul style={style.buttongroup} id="poo">
@@ -44,18 +49,35 @@ const ButtonGroup = React.createClass({
 						const firstStyles = (i === 0) ? style.firstButtonGroupItem : {};
 						const lastStyles = (i === allContent.length - 1) ? style.lastButtonGroupItem : {};
 						const aOinA = (activeTool === content.toolName) ? style.activeStyles : null;
+						var activeMessageType = "";
+
+						if(content.toolName === "Schedule" && enableSchedule && activeTool === "Schedule") {
+
+						} else if(content.toolName === "Queue" && enableQueue && activeTool === "Queue") {
+
+						} else {
+							if(content.toolName === "Schedule" && enableSchedule) {
+								activeMessageType = style.activeMessageType;
+							} else if(content.toolName === "Queue" && enableQueue) {
+								activeMessageType = style.activeMessageType;
+							} else {
+								activeMessageType = null;
+							}
+						}
 
 						return <ButtonGroupItem 
 									content={content} 
 									key={i} 
 									id={idKey} 
 									buttonIndex={i} 
-									style={[aOinA, Object.assign(firstStyles, lastStyles)]} 
+									style={[aOinA, Object.assign(firstStyles, lastStyles), activeMessageType]} 
 									featureDescription={content.toolName} 
 									showTip={showTip}
 									showTool={showTool} 
 									toolIcon={content.toolIcon}
 									activeTool={activeTool}
+									enableSchedule={enableSchedule}
+									enableQueue={enableQueue}
 								/>;
 					}
 				)}

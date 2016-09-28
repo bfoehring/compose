@@ -11,7 +11,6 @@ import InfoTip from "./infotip";
 import MediumHeadline from "./mediumheadline";
 import MenuList from "./menulist";
 import Filter from "./filter";
-import Checkbox from "./checkbox";
 import Draggable from "react-draggable";
 
 const Container = React.createClass({
@@ -24,9 +23,8 @@ const Container = React.createClass({
 			profiles: ["15charactername", "16charactername", "17charactername", "bill_foehring", "anotherHandle"],
 			textRows: "4",
 			availableTools: [
-				{toolName: "Scheduling Options", toolIcon: "fa fa-calendar"}, 
-				{toolName: "Queue Options", toolIcon: "fa fa-hourglass-half"}, 
-				{toolName: "Make Draft", toolIcon: "fa fa-file-text"},
+				{toolName: "Schedule", toolIcon: "fa fa-calendar"}, 
+				{toolName: "Queue", toolIcon: "fa fa-hourglass-half"}, 
 				{toolName: "Media", toolIcon: "fa fa-paperclip"}, 
 				{toolName: "Targeting", toolIcon: "fa fa-bullseye"}, 
 				{toolName: "Tagging", toolIcon: "fa fa-tag"}, 
@@ -65,7 +63,6 @@ const Container = React.createClass({
 			filteredUsers: "",
 			enableSchedule: false,
 			enableQueue: false,
-			enableDraft: false,
 			position: {
 				x: 0,
 				y: 0
@@ -143,9 +140,6 @@ const Container = React.createClass({
 				break;
 			case "Queue":
 				alert("your message was queued");
-				break;
-			case "Draft":
-				alert("your message was drafted");
 				break;
 			default:
 				alert("there was an error");
@@ -286,60 +280,36 @@ const Container = React.createClass({
 		
 		switch(messageType) {
 			case "Schedule":
-				if(this.state.enableSchedule) {
-					this.setState({
-						enableSchedule: false,
-						messageType: "Compose",
-						buttonText: "Send"
-					});
-				} else {
-					this.setState({
-						enableSchedule: true,
-						enableQueue: false,
-						enableDraft: false,
-						messageType: messageType,
-						buttonText: messageType,
-					});	
-				}
+				this.setState({
+					enableSchedule: true,
+					enableQueue: false,
+					messageType: messageType,
+					buttonText: messageType,
+				});	
 				break;
 			case "Queue":
-				if(this.state.enableQueue) {
-					this.setState({
-						enableQueue: false,
-						messageType: "Compose",
-						buttonText: "Send"
-					});
-				} else {
-					this.setState({
-						enableQueue: true,
-						enableSchedule: false,
-						enableDraft: false,
-						messageType: messageType,
-						buttonText: messageType,
-					});	
-				}
-				break;
-			case "Draft":
-				if(this.state.enableDraft) {
-					this.setState({
-						enableDraft: false,
-						messageType: "Compose",
-						buttonText: "Send"
-					});
-				} else {
-					this.setState({
-						enableDraft: true,
-						enableSchedule: false,
-						enableQueue: false,
-						messageType: messageType,
-						buttonText: messageType,
-					});	
-				}
+				this.setState({
+					enableQueue: true,
+					enableSchedule: false,
+					messageType: messageType,
+					buttonText: messageType,
+				});	
 				break;
 			default:
-				console.log("error");
+				console.log("not a message type");
 				break;
 		}
+	},
+
+	showToolChangeMessage(e) {
+
+		var tool = e.currentTarget.id;
+		var name = tool.replace("-buttonGroup", "");
+
+		this.toggleMessageType(name);
+		this.showTool(e);
+
+		console.log(name);
 	},
 	
 	render() {
@@ -625,38 +595,29 @@ const Container = React.createClass({
 							{
 								this.state.showTip ? <InfoTip tipPosition={this.state.tipPosition} featureDescription={this.state.tipDescription} /> : null
 							}
-							<ButtonGroup key="six" content={this.state.availableTools} showTip={this.showTip} showTool={this.showTool} activeTool={this.state.activeTool}/>
+							<ButtonGroup 
+								key="six" 
+								content={this.state.availableTools} 
+								showTip={this.showTip} 
+								showTool={this.showToolChangeMessage} 
+								activeTool={this.state.activeTool}
+								enableSchedule={this.state.enableSchedule}
+								enableQueue={this.state.enableQueue}
+							/>
 						</div>
 					</div>
 					<div>
 						{
 							this.state.showTool ? 
 								<div style={this.state.isMinimized ? style.minToolContainer : style.toolContainer}>
-									{(this.state.activeTool === "Scheduling Options") ?
+									{(this.state.activeTool === "Schedule") ?
 										<div> 
 											<MediumHeadline headline="Scheduling Options" /> 
-											<div style={style.checkboxContain}>
-												<Checkbox checked={this.state.enableSchedule} onClick={this.toggleMessageType.bind(null, "Schedule")} />
-											</div>
-											<span style={style.label}>Schedule Message</span>
 										</div> : 
 									null}
-									{(this.state.activeTool === "Queue Options") ? 
+									{(this.state.activeTool === "Queue") ? 
 										<div>
 											<MediumHeadline headline="Queue Options" />
-											<div style={style.checkboxContain}>
-												<Checkbox checked={this.state.enableQueue} onClick={this.toggleMessageType.bind(null, "Queue")} />
-											</div>
-											<span style={style.label}>Queue Message</span>
-										</div> : 
-									null}
-									{(this.state.activeTool === "Make Draft") ? 
-										<div>
-											<MediumHeadline headline="Make Draft" />
-											<div style={style.checkboxContain}>
-												<Checkbox checked={this.state.enableDraft} onClick={this.toggleMessageType.bind(null, "Draft")} />
-											</div>
-											<span style={style.label}>Make Draft</span>
 										</div> : 
 									null}
 									{(this.state.activeTool === "Media") ?
