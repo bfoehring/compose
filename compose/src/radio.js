@@ -59,31 +59,50 @@ const Radio = React.createClass({
 				float: "left"
 			},
 
+			radioButton: {
+				listStyle: "none",
+				fontFamily: "'Proxima Nova', 'Helvetica', sans-serif",
+				color: "#333",
+				float: "left",
+				padding: 8,
+				borderRadius: 3,
+				border: "1px solid #ddd",
+				width: "100%",
+				margin: "10px 0px 0px 0px",
+
+				":hover": {
+					cursor: "pointer"
+				}
+			},
+
 			label: {
 				float: "left",
-				marginTop: 2
+				marginTop: 2,
+				fontSize: 14
 			},
 
 			firstChild: {
-				margin: "0px 20px 0px 0px",
+				margin: "0px 0px 0px 0px",
 			}
 		};
 
 		const onClick = this.props.onClick;
 		const radioActive = this.props.radioActive;
+		const button = this.props.button;
 
 		return(
 			<ul style={style.radios}>
 				{this.props.options.map(
-					function(options, i) {
+					function(options, i, allContent) {
 
 						const key = options + i;
 						const keyStyle= options + i + "style";
 						var activeRadio = (i === radioActive) ? style.radioActive : style.radioInactive;
 						var firstChild = (i === 0) ? style.firstChild : null;
+						var liType = (button) ? style.radioButton : style.radio;
 
 						return(
-							<li style={[style.radio, firstChild]} key={key} onClick={() => onClick(i)}>
+							<li style={[liType, firstChild]} key={key} onClick={() => onClick(i)}>
 								<div style={activeRadio} key={keyStyle}><i className="fa fa-circle" aria-hidden="true"></i></div>
 								<span style={style.label}>{options}</span>
 							</li>

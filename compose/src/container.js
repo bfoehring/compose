@@ -14,6 +14,10 @@ import Filter from "./filter";
 import Draggable from "react-draggable";
 import TextLink from "./textlink";
 import Radio from "./radio";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+var moment = require("moment");
 
 const Container = React.createClass({
 
@@ -71,7 +75,10 @@ const Container = React.createClass({
 				x: 0,
 				y: 0
 			},
-			radioActive: 0
+			radioActive: 0,
+			scheduleStartDate: moment(),
+			scheduledDates: [],
+			queueStartDate: null,
 		};
 	},
 
@@ -327,7 +334,26 @@ const Container = React.createClass({
 
 	queueNextLast(num) {
 		this.setState({
-			radioActive: num
+			radioActive: num,
+			queueStartDate: null
+		});
+	},
+
+	changeScheduleDate(date) {
+
+		this.state.scheduledDates.push(date);
+
+		this.setState({
+			scheduleStartDate: date,
+		});
+
+		console.log(this.state.scheduledDates);
+	},
+
+	changeQueueDate(date) {
+		this.setState({
+			queueStartDate: date,
+			radioActive: null
 		});
 	},
 	
@@ -501,7 +527,7 @@ const Container = React.createClass({
 
 			toolContainer: {
 				padding: "0px 20px 20px 20px",
-				maxHeight: 200,
+				maxHeight: 280,
 				overflow: "scroll"
 			},
 
@@ -557,6 +583,13 @@ const Container = React.createClass({
 			},
 
 			queueRadioContain: {
+				//float: "left"
+				width: "25%"
+			},
+
+			yourToolbar: {
+				padding: 10,
+				border: "2px dashed #eee",
 				float: "left"
 			}
 		};
@@ -644,14 +677,33 @@ const Container = React.createClass({
 								<div style={this.state.isMinimized ? style.minToolContainer : style.toolContainer}>
 									{(this.state.activeTool === "Schedule") ?
 										<div> 
-											<MediumHeadline headline="Scheduling Options" /> 
+											<MediumHeadline headline="Scheduling Options" />
+											<DatePicker 
+												selected={this.state.scheduleStartDate}
+												onChange={this.changeScheduleDate}
+												inline
+												todayButton={"Today"}
+												className="inputStyle"
+											/>
 										</div> : 
 									null}
 									{(this.state.activeTool === "Queue") ? 
 										<div>
 											<MediumHeadline headline="Queue Options" />
 											<div style={style.queueRadioContain}>
-												<Radio options={this.props.queueOptions} radioActive={this.state.radioActive} onClick={this.queueNextLast} />
+												<Radio 
+													options={this.props.queueOptions} 
+													radioActive={this.state.radioActive} 
+													onClick={this.queueNextLast}
+													button={true} 
+												/>
+												<DatePicker 
+													selected={this.state.queueStartDate}
+													onChange={this.changeQueueDate}
+													todayButton={"Today"}
+													className="inputStyle"
+													placeholderText="Choose Date"
+												/>
 											</div>
 										</div> : 
 									null}
@@ -688,6 +740,12 @@ const Container = React.createClass({
 									{(this.state.activeTool === "More Options") ?
 										<div> 
 											<MediumHeadline headline="More Options" />
+												<div style={style.yourToolbar}>
+													<ButtonGroup 
+														key="sortableButtonGroup" 
+														content={this.state.availableTools} 
+													/>
+												</div>
 										</div> : 
 									null}
 								</div> 
