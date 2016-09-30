@@ -9,12 +9,12 @@ const Radio = React.createClass({
 
 			radioActive: {
 				color: "#fff",
-				borderRadius: 24,
+				borderRadius: 17,
 				border: "1px solid rgb(89, 203, 89)",
 				padding: 3,
-				height: 12,
-				width: 12,
-				fontSize: 12,
+				height: 11,
+				width: 11,
+				fontSize: 10,
 				background: "rgb(89, 203, 89)",
 				margin: "0px 10px 0px 0px",
 				float: "left",
@@ -29,12 +29,12 @@ const Radio = React.createClass({
 
 			radioInactive: {
 				color: "#fff",
-				borderRadius: 24,
+				borderRadius: 17,
 				border: "1px solid #e6e6e6",
 				padding: 3,
-				height: 12,
-				width: 12,
-				fontSize: 12,
+				height: 11,
+				width: 11,
+				fontSize: 10,
 				background: "#fff",
 				margin: "0px 10px 0px 0px",
 				float: "left",
