@@ -17,6 +17,7 @@ import Radio from "./radio";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Message from "./message";
+import Tabs from "./tabs";
 
 var moment = require("moment");
 
@@ -60,7 +61,8 @@ const Container = React.createClass({
 					time: "3:45PM"
 				},
 			],
-			queueTimes: "8:30am, 10:00am, 11:45am, 12:15pm, 1:30pm, 2:00pm, 3:38pm, 5:23pm"
+			queueTimes: "8:30am, 10:00am, 11:45am, 12:15pm, 1:30pm, 2:00pm, 3:38pm, 5:23pm",
+			addtionalOptions: ["Customize", "Targeting", "Scheduling", "Queue"],
 		};
 	},
 
@@ -99,6 +101,8 @@ const Container = React.createClass({
 			scheduleStartDate: moment(),
 			scheduledDates: [],
 			queueStartDate: null,
+			addtionalOptions: this.props.addtionalOptions,
+			additionalOptionSelected: 0,
 		};
 	},
 
@@ -374,6 +378,12 @@ const Container = React.createClass({
 		this.setState({
 			queueStartDate: date,
 			radioActive: null
+		});
+	},
+
+	chooseAdditionalOption(num) {
+		this.setState({
+			additionalOptionSelected: num
 		});
 	},
 	
@@ -799,6 +809,7 @@ const Container = React.createClass({
 									{(this.state.activeTool === "More Options") ?
 										<div> 
 											<MediumHeadline headline="More Options" />
+											<Tabs options={this.state.addtionalOptions} onClick={this.chooseAdditionalOption} selectedTab={this.state.additionalOptionSelected}/>
 												<div style={style.yourToolbar}>
 													<ButtonGroup 
 														key="sortableButtonGroup" 
