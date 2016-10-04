@@ -67,11 +67,12 @@ const Radio = React.createClass({
 				padding: 8,
 				borderRadius: 3,
 				border: "1px solid #ddd",
-				width: "100%",
+				width: "calc(100% - 18px)",
 				margin: "10px 0px 0px 0px",
 
 				":hover": {
-					cursor: "pointer"
+					cursor: "pointer",
+					border: "1px solid rgb(23, 184, 206)",
 				}
 			},
 
@@ -93,7 +94,7 @@ const Radio = React.createClass({
 		return(
 			<ul style={style.radios}>
 				{this.props.options.map(
-					function(options, i, allContent) {
+					function(options, i) {
 
 						const key = options + i;
 						const keyStyle= options + i + "style";

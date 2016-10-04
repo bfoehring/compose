@@ -16,6 +16,7 @@ import TextLink from "./textlink";
 import Radio from "./radio";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import Message from "./message";
 
 var moment = require("moment");
 
@@ -40,7 +41,26 @@ const Container = React.createClass({
 			messageTypes: ["Compose", "Schedule", "Queue", "Draft"],
 			users: ["Arnita Hayden", "Bill Foehring", "Henry Millison", "Cory Danielson", "Brian Cordionnier", "Ryan Skurkis", "Austin Gundry", "Viju Hullur"],
 			tags: ["sproutsocial", "social media", "sprout coffee", "YOLO", "getsocial", "productideas", "customer support", "compose 2.0", "new compose"],
-			queueOptions: ["Queue Next", "Queue Last"]
+			queueOptions: ["Queue Next", "Queue Last"],
+			messages: [
+				{
+					message: "The @ChiSproutCoffee staff are true artists. I had the coolest latte art this morning! #mysproutcafe", 
+					network: "fa fa-twitter-square",
+					profile: "Sprout Coffee Co.",
+					user: "Laura Lozano",
+					date: "Oct 3, 2016",
+					time: "8:23AM"
+				},
+				{
+					message: "Brr...it’s cold out there! Stop by for a custom hot chocolate - vanilla, hazelnut and cinnamon flavored! #mysproutcafe", 
+					network: "fa fa-twitter-square",
+					profile: "Sprout Coffee Co.",
+					user: "Gilbert Lara",
+					date: "Oct 4, 2016",
+					time: "3:45PM"
+				},
+			],
+			queueTimes: "8:30am, 10:00am, 11:45am, 12:15pm, 1:30pm, 2:00pm, 3:38pm, 5:23pm"
 		};
 	},
 
@@ -583,14 +603,44 @@ const Container = React.createClass({
 			},
 
 			queueRadioContain: {
-				//float: "left"
+				float: "left",
 				width: "25%"
+			},
+
+			queueMessageContain: {
+				float: "left",
+				margin: "0px 0px 0px 30px",
+				width: "calc(75% - 30px)"
 			},
 
 			yourToolbar: {
 				padding: 10,
 				border: "2px dashed #eee",
 				float: "left"
+			},
+
+			datePickerInputContain: {
+				margin: "10px 0px 20px 0px",
+				float: "left"
+			},
+
+			h3: {
+				textTransform: "uppercase",
+				letterSpacing: "0.1em",
+				fontSize: 12,
+				fontWeight: 600,
+				color: "#b3b3b3",
+				fontFamily: "Proxima Nova",
+				margin: "0px 0px 10px 0px"
+			},
+
+			queueTimes: {
+				fontFamily: "Proxima Nova",
+				fontSize: 14,
+				fontWeight: 300,
+				lineHeight: "21px",
+				color: "#4d4d4d",
+				margin: "10px 0px 0px 0px"
 			}
 		};
 
@@ -697,13 +747,22 @@ const Container = React.createClass({
 													onClick={this.queueNextLast}
 													button={true} 
 												/>
-												<DatePicker 
-													selected={this.state.queueStartDate}
-													onChange={this.changeQueueDate}
-													todayButton={"Today"}
-													className="inputStyle"
-													placeholderText="Choose Date"
-												/>
+												<div style={style.datePickerInputContain}>
+													<DatePicker 
+														selected={this.state.queueStartDate}
+														onChange={this.changeQueueDate}
+														todayButton={"Today"}
+														className="inputStyle"
+														placeholderText="Choose Date"
+														fixedHeight
+													/>
+												</div>
+												<h3 style={style.h3}>Everyday</h3>
+												<p style={style.queueTimes}>{this.props.queueTimes}</p>
+											</div>
+											<div style={style.queueMessageContain}>
+												<h3 style={style.h3}>Next Two Messages</h3>
+												<Message message={this.props.messages} />
 											</div>
 										</div> : 
 									null}
