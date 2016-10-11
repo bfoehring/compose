@@ -37,7 +37,9 @@ const Container = React.createClass({
 				{toolName: "Targeting", toolIcon: "fa fa-bullseye"}, 
 				{toolName: "Tagging", toolIcon: "fa fa-tag"}, 
 				{toolName: "Message Approval", toolIcon: "fa fa-check-circle"},
-				{toolName: "More Options", toolIcon: "fa fa-ellipsis-h"}
+				{toolName: "URL Tracking", toolIcon: "fa fa-link"},
+				{toolName: "Message Preview", toolIcon: "fa fa-eye"},
+				{toolName: "Notifications", toolIcon: "fa fa-bell"}
 			],
 			messageTypes: ["Compose", "Schedule", "Queue", "Draft"],
 			users: ["Arnita Hayden", "Bill Foehring", "Henry Millison", "Cory Danielson", "Brian Cordionnier", "Ryan Skurkis", "Austin Gundry", "Viju Hullur"],
@@ -75,7 +77,8 @@ const Container = React.createClass({
 			isInactive: true,
 			isMessagePickerShown: false,
 			showToken: false,
-			availableTools: this.props.availableTools,
+			defaultTools: [],
+			toolOverflow: [],
 			isEmpty: true,
 			showTip: false,
 			tipDescription: "",
@@ -111,6 +114,7 @@ const Container = React.createClass({
 			filteredTags: this.state.unfilteredTags,
 			filteredUsers: this.state.unfilteredUsers,
 		});
+		this.configureDynamicGroup(this.props.availableTools);
 	},
 
 	showMessageTypes() {
@@ -386,6 +390,22 @@ const Container = React.createClass({
 			additionalOptionSelected: num
 		});
 	},
+
+	configureDynamicGroup(content) {
+		if(content.length > 5) {
+			var toolOverflow = content.slice(5);
+			var defaultTools = content.slice(0, 5);
+			defaultTools.push({toolName: "More Options", toolIcon: "fa fa-ellipsis-h"});
+			this.setState({
+				toolOverflow: toolOverflow,
+				defaultTools: defaultTools
+			});
+		} else {
+			this.setState({
+				defaultTools: content
+			});
+		}
+	},
 	
 	render() {
 
@@ -612,6 +632,20 @@ const Container = React.createClass({
 				width: "16%"
 			},
 
+			draftContainerMin: {
+				float: "right",
+				margin: "0px 10px 0px 0px",
+				//width: "16%",
+				padding: 8,
+				border: "1px solid #fff",
+				borderRadius: 3,
+
+				":hover": {
+					border: "1px solid rgb(23, 184, 206)",
+					cursor: "pointer"
+				}
+			},
+
 			queueRadioContain: {
 				float: "left",
 				width: "25%"
@@ -627,6 +661,13 @@ const Container = React.createClass({
 				padding: 10,
 				border: "2px dashed #eee",
 				float: "left"
+			},
+
+			additionalTools: {
+				padding: 10,
+				border: "2px dashed #eee",
+				float: "left",
+				margin: "0px 0px 0px 20px"
 			},
 
 			datePickerInputContain: {
@@ -651,6 +692,10 @@ const Container = React.createClass({
 				lineHeight: "21px",
 				color: "#4d4d4d",
 				margin: "10px 0px 0px 0px"
+			},
+
+			minDraftIcon: {
+				color: "rgb(23, 184, 206)"
 			}
 		};
 
@@ -713,16 +758,21 @@ const Container = React.createClass({
 						<div style={style.buttonContainer}>
 							<Button key="five" buttonText={this.state.buttonText} _onClick={this.send} />
 						</div>
-						<div style={style.draftContainer} key="draftContainer" onClick={this.draft}>
-							<TextLink textLinkName="Save Draft" />
-						</div>
+						{ (this.state.isMinimized) ?
+							<div style={style.draftContainerMin} key="draftContainer" onClick={this.draft}> 
+								<i style={style.minDraftIcon} className="fa fa-file-text" aria-hidden="true"></i>
+							</div> :
+							<div style={style.draftContainer} key="draftContainer" onClick={this.draft}>
+								<TextLink textLinkName="Save Draft" />
+							</div>
+						}
 						<div style={style.buttonGroupContainer}>
 							{
 								this.state.showTip ? <InfoTip tipPosition={this.state.tipPosition} featureDescription={this.state.tipDescription} /> : null
 							}
 							<ButtonGroup 
 								key="six" 
-								content={this.state.availableTools} 
+								content={this.state.defaultTools} 
 								showTip={this.showTip} 
 								showTool={this.showToolChangeMessage} 
 								activeTool={this.state.activeTool}
@@ -811,9 +861,17 @@ const Container = React.createClass({
 											<MediumHeadline headline="More Options" />
 											<Tabs options={this.state.addtionalOptions} onClick={this.chooseAdditionalOption} selectedTab={this.state.additionalOptionSelected}/>
 												<div style={style.yourToolbar}>
+													<h3 style={style.h3}>Your Toolbar</h3>
 													<ButtonGroup 
 														key="sortableButtonGroup" 
-														content={this.state.availableTools} 
+														content={this.state.defaultTools} 
+													/>
+												</div>
+												<div style={style.additionalTools}>
+													<h3 style={style.h3}>More Tools</h3>
+													<ButtonGroup 
+														key="sortableButtonGroupOverflow" 
+														content={this.state.toolOverflow} 
 													/>
 												</div>
 										</div> : 

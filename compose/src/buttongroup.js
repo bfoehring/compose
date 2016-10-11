@@ -65,6 +65,11 @@ const ButtonGroup = React.createClass({
 							}
 						}
 
+						if(content.length > 5) {
+							var overflow= content.slice(5, content.length - 1);
+							console.log(overflow);
+						}
+
 						return <ButtonGroupItem 
 									content={content} 
 									key={i} 
